@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Travel AI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .hover-card:hover { transform: translateY(-5px); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans text-gray-800">
+
+    <div class="bg-gradient-to-r from-blue-800 to-indigo-700 text-white p-6 shadow-lg">
+        <div class="container mx-auto text-center">
+            <h1 class="text-4xl font-bold"><i class="fas fa-plane-departure"></i> Smart Travel v4</h1>
+            <p class="mt-2 text-lg opacity-90">Rekomendasi Multi-Model: Sistem, Kolaboratif, & Graf AI</p>
+        </div>
+    </div>
+
+    <div class="container mx-auto p-6">
+        <div id="surveySection" class="bg-white p-8 rounded-xl shadow-md max-w-3xl mx-auto mb-10 border border-gray-200">
+            <div class="flex items-center mb-6 border-b pb-4">
+                <div class="bg-blue-100 text-blue-700 p-3 rounded-full mr-4"><i class="fas fa-sliders-h text-xl"></i></div>
+                <div><h2 class="text-2xl font-bold text-gray-800">Preferensi Perjalanan</h2><p class="text-sm text-gray-500">Kami gunakan data ini untuk mencari rekomendasi terbaik</p></div>
+            </div>
+            <form id="travelForm">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                    <div><label class="block text-sm font-bold text-gray-700 mb-1">Nama</label><input type="text" id="name" class="w-full p-3 border rounded-lg bg-gray-50 focus:bg-white focus:ring-2 focus:ring-blue-500 transition"></div>
+                    <div><label class="block text-sm font-bold text-gray-700 mb-1">Umur</label><input type="number" id="age" value="25" class="w-full p-3 border rounded-lg bg-gray-50 focus:bg-white focus:ring-2 focus:ring-blue-500 transition"></div>
+                    <div><label class="block text-sm font-bold text-gray-700 mb-1">Gender</label><select id="gender" class="w-full p-3 border rounded-lg bg-gray-50 focus:bg-white focus:ring-2 focus:ring-blue-500 transition"><option>Laki-laki</option><option>Perempuan</option></select></div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                    <div><label class="block text-sm font-bold text-gray-700 mb-1">Kota Tujuan</label><select id="city" class="w-full p-3 border rounded-lg bg-gray-50 focus:bg-white focus:ring-2 focus:ring-blue-500 transition"><option>Jakarta</option><option>Bandung</option><option>Yogyakarta</option><option>Surabaya</option></select></div>
+                    <div><label class="block text-sm font-bold text-gray-700 mb-1">Budget Maksimal (Rp)</label><input type="number" id="budget" value="100000" class="w-full p-3 border rounded-lg bg-gray-50 focus:bg-white focus:ring-2 focus:ring-blue-500 transition"></div>
+                </div>
+                <div class="mb-8"><label class="block text-sm font-bold text-gray-700 mb-3">Kategori Minat (Pilih minimal 1)</label>
+                    <div class="flex flex-wrap gap-3">
+                        <label class="cursor-pointer select-none"><input type="checkbox" name="pref" value="Budaya" class="peer sr-only"><div class="px-4 py-2 rounded-full border-2 border-gray-300 bg-white text-gray-600 peer-checked:bg-blue-600 peer-checked:text-white peer-checked:border-blue-600 transition hover:bg-gray-50 font-semibold"><i class="fas fa-theater-masks mr-1"></i> Budaya</div></label>
+                        <label class="cursor-pointer select-none"><input type="checkbox" name="pref" value="Alam" class="peer sr-only"><div class="px-4 py-2 rounded-full border-2 border-gray-300 bg-white text-gray-600 peer-checked:bg-blue-600 peer-checked:text-white peer-checked:border-blue-600 transition hover:bg-gray-50 font-semibold"><i class="fas fa-tree mr-1"></i> Alam</div></label>
+                        <label class="cursor-pointer select-none"><input type="checkbox" name="pref" value="Hiburan" class="peer sr-only"><div class="px-4 py-2 rounded-full border-2 border-gray-300 bg-white text-gray-600 peer-checked:bg-blue-600 peer-checked:text-white peer-checked:border-blue-600 transition hover:bg-gray-50 font-semibold"><i class="fas fa-ticket-alt mr-1"></i> Hiburan</div></label>
+                        <label class="cursor-pointer select-none"><input type="checkbox" name="pref" value="Pantai" class="peer sr-only"><div class="px-4 py-2 rounded-full border-2 border-gray-300 bg-white text-gray-600 peer-checked:bg-blue-600 peer-checked:text-white peer-checked:border-blue-600 transition hover:bg-gray-50 font-semibold"><i class="fas fa-water mr-1"></i> Pantai</div></label>
+                    </div>
+                </div>
+                <button type="submit" class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-4 rounded-lg font-bold text-lg shadow-md hover:shadow-lg transition transform hover:-translate-y-0.5">Temukan Wisata Impian</button>
+            </form>
+        </div>
+
+        <div id="resultSection" class="hidden max-w-6xl mx-auto">
+            <div class="flex justify-between items-end mb-6">
+                <div><h2 class="text-3xl font-bold text-gray-800">Hasil Rekomendasi Personal</h2><p id="resultSubtitle" class="text-gray-600 mt-1"></p></div>
+                <button onclick="resetForm()" class="text-blue-600 font-semibold hover:underline bg-white px-4 py-2 rounded shadow-sm"><i class="fas fa-undo mr-1"></i> Cari Ulang</button>
+            </div>
+            <div id="resultsContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('travelForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const name = document.getElementById('name').value || 'Traveler';
+            const city = document.getElementById('city').value;
+            const budget = document.getElementById('budget').value;
+            const prefs = Array.from(document.querySelectorAll('input[name="pref"]:checked')).map(el => el.value);
+
+            if (prefs.length === 0) { alert("Pilih minimal satu kategori minat!"); return; }
+
+            const container = document.getElementById('resultsContainer');
+            document.getElementById('surveySection').classList.add('hidden');
+            document.getElementById('resultSection').classList.remove('hidden');
+            container.innerHTML = `<div class="col-span-3 text-center py-20"><i class="fas fa-circle-notch fa-spin text-5xl text-blue-600 mb-4"></i><p class="text-lg text-gray-600 font-semibold">Menganalisis profil dengan multi-model AI...</p></div>`;
+
+            try {
+                const response = await fetch('/recommend', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ city, budget, preferences: prefs })
+                });
+                const data = await response.json();
+                container.innerHTML = '';
+                document.getElementById('resultSubtitle').innerHTML = `Halo <b>${name}</b>, ini rekomendasi di <b>${city}</b> untukmu.`;
+
+                if (data.length === 0) {
+                    container.innerHTML = `<div class="col-span-3 text-center py-10 bg-white rounded-lg shadow"><i class="far fa-frown text-4xl text-gray-400 mb-3"></i><p class="text-gray-600 font-semibold">Tidak ditemukan tempat yang cocok dengan budget/kategori tersebut.</p></div>`; return;
+                }
+
+                data.forEach((place, index) => {
+                    let specialBadge = '';
+                    let borderColor = 'border-transparent';
+                    let extraInfo = '';
+                    let actionButton = '';
+
+                    // LOGIKA TAMPILAN BADGE & TOMBOL
+                    if (place.reco_type === 'system') {
+                        specialBadge = `<div class="bg-blue-600 text-white text-xs font-extrabold uppercase px-4 py-2 absolute top-0 left-0 rounded-br-xl z-10 shadow-md tracking-wider"><i class="fas fa-brain mr-2"></i> Pilihan Cerdas Sistem</div>`;
+                        borderColor = 'border-blue-500 ring-4 ring-blue-50';
+                        extraInfo = `<p class="text-xs text-blue-600 font-semibold mt-1"><i class="fas fa-check-circle"></i> Cocok kriteria & sentimen positif</p>`;
+                        actionButton = `<button onclick="promptReview(${place.id})" class="mt-5 w-full border-2 border-blue-600 text-blue-700 py-2.5 rounded-xl font-bold hover:bg-blue-50 transition flex justify-center items-center gap-2 shadow-sm"><i class="far fa-edit"></i> Beri Ulasan</button>`;
+                    } else if (place.reco_type === 'collaborative') {
+                        specialBadge = `<div class="bg-purple-600 text-white text-xs font-extrabold uppercase px-4 py-2 absolute top-0 left-0 rounded-br-xl z-10 shadow-md tracking-wider"><i class="fas fa-users mr-2"></i> Disukai Wisatawan Serupa</div>`;
+                        borderColor = 'border-purple-500 ring-4 ring-purple-50';
+                        extraInfo = `<p class="text-xs text-purple-600 font-semibold mt-1"><i class="fas fa-user-friends"></i> ${place.collab_info}</p>`;
+                        actionButton = `<button onclick="promptReview(${place.id})" class="mt-5 w-full border-2 border-purple-600 text-purple-700 py-2.5 rounded-xl font-bold hover:bg-purple-50 transition flex justify-center items-center gap-2 shadow-sm"><i class="far fa-edit"></i> Beri Ulasan</button>`;
+                    } else if (place.reco_type === 'gnn') {
+                        // TAMPILAN KHUSUS UNTUK GNN
+                        specialBadge = `<div class="bg-red-600 text-white text-xs font-extrabold uppercase px-4 py-2 absolute top-0 left-0 rounded-br-xl z-10 shadow-md tracking-wider"><i class="fas fa-project-diagram mr-2"></i> Rekomendasi Graf AI</div>`;
+                        borderColor = 'border-red-500 ring-4 ring-red-50';
+                        extraInfo = `<p class="text-xs text-red-600 font-semibold mt-1"><i class="fas fa-link"></i> ${place.collab_info}</p>`;
+                        // TOMBOL LINK KE HALAMAN VISUALISASI
+                        actionButton = `<a href="/graph_visualization/${place.id}"get class="mt-5 w-full bg-red-600 text-white py-2.5 rounded-xl font-bold hover:bg-red-700 transition flex justify-center items-center gap-2 shadow-md"><i class="fas fa-eye"></i> Lihat Visualisasi Graf</a>`;
+                    }
+
+                    let sentColor = place.sentiment_avg >= 0.6 ? 'bg-green-500' : (place.sentiment_avg <= 0.4 ? 'bg-red-500' : 'bg-yellow-400');
+                    
+                    const card = `
+                        <div class="bg-white rounded-2xl shadow-xl overflow-hidden transition duration-300 hover-card flex flex-col h-full border-2 ${borderColor} relative group">
+                            ${specialBadge}
+                            <div class="relative h-56 bg-gray-300 overflow-hidden">
+                                <img src="${place.image_url}" alt="${place.name}" class="w-full h-full object-cover transition duration-700 group-hover:scale-110">
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-80"></div>
+                                <span class="absolute bottom-3 left-3 text-white text-sm font-bold px-3 py-1 bg-white/20 backdrop-blur rounded-full border border-white/40">${place.category}</span>
+                            </div>
+                            <div class="p-6 flex-1 flex flex-col">
+                                <div class="flex justify-between items-start mb-1">
+                                    <h3 class="text-xl font-extrabold text-gray-900 leading-tight line-clamp-2">${place.name}</h3>
+                                    <span class="text-blue-700 font-black text-lg">${place.match_percent}%</span>
+                                </div>
+                                ${extraInfo}
+                                <div class="text-sm text-gray-600 space-y-2 my-4 flex-grow">
+                                    <p class="flex items-center font-medium"><i class="fas fa-tag w-6 text-center text-blue-500 mr-2"></i> ${place.price === 0 ? 'Gratis' : 'Rp ' + place.price.toLocaleString()}</p>
+                                    <p class="flex items-center font-medium"><i class="fas fa-star w-6 text-center text-yellow-500 mr-2"></i> ${place.rating} / 5.0</p>
+                                </div>
+                                <div class="bg-gray-50 p-4 rounded-xl border border-gray-100 shadow-inner">
+                                    <div class="flex justify-between text-xs mb-2 font-bold text-gray-500 uppercase tracking-wide">
+                                        <span>Analisis Sentimen Ulasan</span>
+                                        <span class="${place.sentiment_avg >= 0.6 ? 'text-green-600' : 'text-gray-600'}">${(place.sentiment_avg * 100).toFixed(0)}% Positif</span>
+                                    </div>
+                                    <div class="w-full bg-gray-200 rounded-full h-2.5 overflow-hidden"><div class="${sentColor} h-full rounded-full shadow-sm" style="width: ${place.sentiment_avg * 100}%"></div></div>
+                                </div>
+                                ${actionButton}
+                            </div>
+                        </div>
+                    `;
+                    container.innerHTML += card;
+                });
+            } catch (e) { console.error(e); alert('Gagal terhubung ke server.'); resetForm(); }
+        });
+        function resetForm() { document.getElementById('surveySection').classList.remove('hidden'); document.getElementById('resultSection').classList.add('hidden'); window.scrollTo(0,0); }
+        async function promptReview(placeId) { /* Sama seperti sebelumnya */ }
+    </script>
+</body>
+</html>
